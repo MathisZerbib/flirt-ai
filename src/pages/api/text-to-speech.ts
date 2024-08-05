@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "xi-api-key": process.env.NEXT_PUBLIC_ELEVEN_API_KEY || "",
+            "xi-api-key": process.env.NEXT_ELEVEN_API_KEY || "",
         },
         body: JSON.stringify({
             text,
