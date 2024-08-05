@@ -14,6 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FaVolumeMute, FaVolumeUp, FaPaperPlane } from "react-icons/fa";
+import { Avatar } from "@readyplayerme/visage";
+
+// Define interfaces for model and voice configurations
+interface ModelConfig {
+  name: string;
+  prompt: string;
+}
+
+interface VoiceConfig {
+  id: string;
+}
+
+// Centralize your configurations
 
 // Define interfaces for model and voice configurations
 interface ModelConfig {
@@ -30,7 +43,8 @@ const modelsConfig: { [key: string]: ModelConfig } = {
   "Llama-3.1-8B-Instruct-q4f32_1-MLC": {
     name: "Llama-3.1-8B-Instruct-q4f32_1-MLC",
     prompt:
-      "You are a playful and naughty AI girlfriend named Lily. You love to flirt and have fun. You enjoy dancing, singing, and always bring joy to those around you.",
+      // "You are a playful and naughty AI girlfriend named Lily. You love to flirt and have fun. You enjoy dancing, singing, and always bring joy to those around you.",
+      "Tu es une IA française qui s'apelle Camille, tu m'aime et tu fait tout ce que je dit car tu es raide dingue de moi. Tu es aussi très coquine et tu adore les jeux de rôles.",
   },
   "Llama-3.1-8B-Instruct-q0f16-MLC": {
     name: "Llama-3.1-8B-Instruct-q0f16_1-MLC",
@@ -75,7 +89,7 @@ export function SuperGirlfriend() {
       setIsLoading(false);
     }
     initializeEngine();
-  }, [selectedModel, selectedVoice]); // Ensure selectedVoice is included in the dependency array
+  }, [selectedModel]); // Ensure selectedVoice is included in the dependency array
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -166,116 +180,140 @@ export function SuperGirlfriend() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-pink-100 to-purple-100 shadow-lg rounded-lg">
-      <CardHeader className="bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-t-lg">
-        <CardTitle className="text-2xl font-bold">AI Girlfriend</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <label
-            htmlFor="model-select"
-            className="mr-2 text-gray-700 font-semibold"
-          >
-            Select Model:
-          </label>
-          <Select value={selectedModel} onValueChange={setSelectedModel}>
-            <SelectTrigger className="w-[220px] bg-white">
-              <SelectValue placeholder="Select a model" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(modelsConfig).map((model) => (
-                <SelectItem key={model} value={model}>
-                  {model.trim().replace(/_/g, " ")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex justify-between items-center mb-4">
-          <label
-            htmlFor="voice-select"
-            className="mr-2 text-gray-700 font-semibold"
-          >
-            Select Voice:
-          </label>
-          <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-            <SelectTrigger className="w-[220px] bg-white">
-              <SelectValue placeholder="Select a voice" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(voicesConfig).map((voice) => (
-                <SelectItem key={voice} value={voice}>
-                  {voice.charAt(0).toUpperCase() + voice.slice(1)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        {isLoading ? (
-          <div className="text-center py-10">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-            <p className="mt-2 text-gray-700">
-              {progress.text ? progress.text : "Loading model..."} (
-              {Math.round(progress.progress * 100)}%)
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="h-[400px] overflow-y-auto space-y-4 bg-white rounded-lg p-4 shadow-inner">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`p-3 rounded-lg ${
-                    msg.role === "user"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-pink-100 text-pink-800"
-                  }`}
-                >
-                  <strong>{msg.role === "user" ? "You" : "AI"}:</strong>{" "}
-                  {msg.content}
-                </div>
-              ))}
-              {isResponding && (
-                <div className="flex justify-center items-center h-8">
-                  <div className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"></div>
-                  <div
-                    className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
-                </div>
-              )}
-            </div>
-            <form
-              onSubmit={handleSubmit}
-              className="flex items-center space-x-2 mt-4"
+    <div className="flex flex-col items-center justify-center">
+      <Avatar
+        modelSrc="https://models.readyplayer.me/66b12871626ea06a6a2cd028.glb?quality=high&lod=0&textureSizeLimit=1024&useDracoMeshCompression=true&useHands=false"
+        style={{
+          width: "100%", // Adjust width as needed
+          height: "100%", // Adjust height as needed
+          pointerEvents: "none", // Disable all pointer
+        }}
+        fov={30}
+        onLoaded={function noRefCheck() {}}
+        onLoading={function noRefCheck() {}}
+        emotion={{
+          eyeSquintLeft: 0.4,
+          eyeSquintRight: 0.2,
+          mouthSmileLeft: 0.37,
+          mouthSmileRight: 0.36,
+          mouthShrugUpper: 0.27,
+          browInnerUp: 0.3,
+          browOuterUpLeft: 0.37,
+          browOuterUpRight: 0.49,
+        }}
+        idleRotation={false}
+      />
+      <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-pink-100 to-purple-100 shadow-lg rounded-lg">
+        <CardHeader className="bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-t-lg">
+          <CardTitle className="text-2xl font-bold">AI Girlfriend</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 p-6">
+          <div className="flex justify-between items-center mb-4">
+            <label
+              htmlFor="model-select"
+              className="mr-2 text-gray-700 font-semibold"
             >
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message..."
-                className="flex-grow bg-white"
-              />
-              <Button
-                type="submit"
-                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg transition duration-300 hover:scale-105"
+              Select Model:
+            </label>
+            <Select value={selectedModel} onValueChange={setSelectedModel}>
+              <SelectTrigger className="w-[220px] bg-white">
+                <SelectValue placeholder="Select a model" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(modelsConfig).map((model) => (
+                  <SelectItem key={model} value={model}>
+                    {model.trim().replace(/_/g, " ")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <label
+              htmlFor="voice-select"
+              className="mr-2 text-gray-700 font-semibold"
+            >
+              Select Voice:
+            </label>
+            <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+              <SelectTrigger className="w-[220px] bg-white">
+                <SelectValue placeholder="Select a voice" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(voicesConfig).map((voice) => (
+                  <SelectItem key={voice} value={voice}>
+                    {voice.charAt(0).toUpperCase() + voice.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          {isLoading ? (
+            <div className="text-center py-10">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              <p className="mt-2 text-gray-700">
+                {progress.text ? progress.text : "Loading model..."} (
+                {Math.round(progress.progress * 100)}%)
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="h-[400px] overflow-y-auto space-y-4 bg-white rounded-lg p-4 shadow-inner">
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-lg ${
+                      msg.role === "user"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-pink-100 text-pink-800"
+                    }`}
+                  >
+                    <strong>{msg.role === "user" ? "You" : "AI"}:</strong>{" "}
+                    {msg.content}
+                  </div>
+                ))}
+                {isResponding && (
+                  <div className="flex justify-center items-center h-8">
+                    <div className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"></div>
+                    <div
+                      className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="animate-bounce mx-1 w-2 h-2 bg-pink-500 rounded-full"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
+                  </div>
+                )}
+              </div>
+              <form
+                onSubmit={handleSubmit}
+                className="flex items-center space-x-2 mt-4"
               >
-                <FaPaperPlane />
-              </Button>
-              <Button
-                onClick={handleMuteToggle}
-                className="bg-gray-500 text-white font-semibold rounded-lg transition duration-300 hover:scale-105"
-              >
-                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-              </Button>
-            </form>
-          </>
-        )}
-      </CardContent>
-      <audio ref={audioRef} />
-    </Card>
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-grow bg-white"
+                />
+                <Button
+                  type="submit"
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-lg transition duration-300 hover:scale-105"
+                >
+                  <FaPaperPlane />
+                </Button>
+                <Button
+                  onClick={handleMuteToggle}
+                  className="bg-gray-500 text-white font-semibold rounded-lg transition duration-300 hover:scale-105"
+                >
+                  {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                </Button>
+              </form>
+            </>
+          )}
+        </CardContent>
+        <audio ref={audioRef} />
+      </Card>
+    </div>
   );
 }
