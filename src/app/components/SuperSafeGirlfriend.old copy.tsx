@@ -3,16 +3,21 @@
 // Import necessary libraries and components
 import React, { useState, useEffect, useRef } from "react";
 import { CreateMLCEngine, InitProgressCallback } from "@mlc-ai/web-llm"; // Assuming this is a valid import path
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/app/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/app/components/ui/select";
 import { FaVolumeMute, FaVolumeUp, FaPaperPlane } from "react-icons/fa";
 import { Avatar } from "@readyplayerme/visage";
 
@@ -40,6 +45,15 @@ interface VoiceConfig {
 
 // Centralize your configurations
 const modelsConfig: { [key: string]: ModelConfig } = {
+  // "Wizard-Vicuna-13B-Uncensored-GGUF": {
+  //   name: "Wizard-Vicuna-13B-Uncensored-GGUF",
+  //   prompt:
+  //     "You are an insightful AI designed to help users with in-depth answers to complex queries.",
+  //   modelId: "Wizard-Vicuna-13B-Uncensored-GGUF",
+  //   modelUrl: "/url/to/Wizard-Vicuna-13B-Uncensored-GGUF.bin",
+  //   modelLib: "/url/to/Wizard-Vicuna-13B-Uncensored-GGUF.wasm",
+  // },
+
   "Llama-3.1-8B-Instruct-q4f32_1-MLC": {
     name: "Llama-3.1-8B-Instruct-q4f32_1-MLC",
     prompt:
@@ -59,7 +73,7 @@ const voicesConfig: { [key: string]: VoiceConfig } = {
   adina: { id: "FvmvwvObRqIHojkEGh5N" },
 };
 
-export function SuperGirlfriend() {
+export function SuperSafeGirlfriend() {
   const [engine, setEngine] = useState<any>(null);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<
